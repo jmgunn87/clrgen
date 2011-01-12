@@ -1,0 +1,391 @@
+<translation_unit>
+	: <external_declaration>{printf("<translation_unit>:<external_declaration>\n");}
+	| <translation_unit><external_declaration>{printf("<translation_unit>:<translation_unit><external_declaration>\n");}
+	;
+
+<external_declaration>
+	: <function_definition>{printf("external_declaration\n");}
+	| <declaration>{printf("external_declaration\n");}
+        ;
+<function_definition>
+	: <declaration_specifiers> <declarator> <declaration_list> <compound_statement>{printf("function_definition\n");}
+	| <declaration_specifiers> <declarator> <compound_statement>{printf("function_definition\n");}
+	| <declarator> <declaration_list> <compound_statement>{printf("function_definition\n");}
+	| <declarator> <compound_statement>{printf("function_definition\n");}
+	;
+<primary_expression>
+	: (IDENTIFIER){printf("primary_expression\n");}
+	| (CONSTANT){printf("primary_expression\n");}
+	| (STRING_LITERAL){printf("primary_expression\n");}
+	| (LPAREN)<expression>(RPAREN){printf("primary_expression\n");}
+	;
+
+<postfix_expression>
+	: <primary_expression>{printf("postfix_expression\n");}
+	| <postfix_expression> (LBRACKET)<expression>(RBRACKET){printf("postfix_expression\n");}
+	| <postfix_expression> (LPAREN) (RPAREN){printf("postfix_expression\n");}
+	| <postfix_expression> (LPAREN)<argument_expression_list>(RPAREN){printf("postfix_expression\n");}
+	| <postfix_expression> (DOT) (IDENTIFIER){printf("postfix_expression\n");}
+	| <postfix_expression> (PTR_OP) (IDENTIFIER){printf("postfix_expression\n");}
+	| <postfix_expression> (INC_OP){printf("postfix_expression\n");}
+	| <postfix_expression> (DEC_OP){printf("postfix_expression\n");}
+	;
+
+<argument_expression_list>
+	: <assignment_expression>{printf("argument_expression\n");}
+	| <argument_expression_list>(COMMA)<assignment_expression>{printf("argument_expression\n");}
+	;
+
+<unary_expression>
+	: <postfix_expression>{printf("unary_expression\n");}
+	| (INC_OP)<unary_expression>{printf("unary_expression\n");}
+	| (DEC_OP)<unary_expression>{printf("unary_expression\n");}
+	| <unary_operator><cast_expression>{printf("unary_expression\n");}
+	| (SIZEOF)<unary_expression>{printf("unary_expression\n");}
+	| (SIZEOF)(LPAREN)<type_name>(RPAREN){printf("unary_expression\n");}
+	;
+
+<unary_operator>
+	: (AND){printf("unary_operator\n");}
+	| (SPLAT){printf("unary_operator\n");}
+	| (ADD){printf("unary_operator\n");}
+	| (MINUS){printf("unary_operator\n");}
+	| (TILDE){printf("unary_operator\n");}
+	| (NOT){printf("unary_operator\n");}
+	;
+
+<cast_expression>
+	: <unary_expression>{printf("cast_expression\n");}
+	| (LPAREN)<type_name>(RPAREN)<cast_expression>{printf("cast_expression\n");}
+	;
+
+<multiplicative_expression>
+	: <cast_expression>{printf("multiplicative_expression\n");}
+	| <multiplicative_expression> (SPLAT) <cast_expression>{printf("multiplicative_expression\n");}
+	| <multiplicative_expression> (DIV) <cast_expression>{printf("multiplicative_expression\n");}
+	| <multiplicative_expression> (MOD) <cast_expression>{printf("multiplicative_expression\n");}
+	;
+
+<additive_expression>
+	: <multiplicative_expression>{printf("additive_expression\n");}
+	| <additive_expression> (ADD) <multiplicative_expression>{printf("additive_expression\n");}
+	| <additive_expression> (MINUS) <multiplicative_expression>{printf("additive_expression\n");}
+	;
+
+<shift_expression>
+	: <additive_expression>{printf("shift_expression\n");}
+	| <shift_expression> (LEFT_OP) <additive_expression>{printf("shift_expression\n");}
+	| <shift_expression> (RIGHT_OP) <additive_expression>{printf("shift_expression\n");}
+	;
+
+<relational_expression>
+	: <shift_expression>{printf("relational_expression\n");}
+	| <relational_expression> (LESS) <shift_expression>{printf("relational_expression\n");}
+	| <relational_expression> (GREATER) <shift_expression>{printf("relational_expression\n");}
+	| <relational_expression> (LE_OP) <shift_expression>{printf("relational_expression\n");}
+	| <relational_expression> (GE_OP) <shift_expression>{printf("relational_expression\n");}
+	;
+
+<equality_expression>
+	: <relational_expression>{printf("equality_expression\n");}
+	| <equality_expression> (EQ_OP) <relational_expression>{printf("equality_expression\n");}
+	| <equality_expression> (NE_OP) <relational_expression>{printf("equality_expression\n");}
+	;
+
+<and_expression>
+	: <equality_expression>{printf("and_expression\n");}
+	| <and_expression> (AND) <equality_expression>{printf("and_expression\n");}
+	;
+
+<exclusive_or_expression>
+	: <and_expression>{printf("XOR_expression\n");}
+	| <exclusive_or_expression> (XOR) <and_expression>{printf("XOR_expression\n");}
+	;
+
+<inclusive_or_expression>
+	: <exclusive_or_expression>{printf("OR_expression\n");}
+	| <inclusive_or_expression> (OR) <exclusive_or_expression>{printf("OR_expression\n");}
+	;
+
+<logical_and_expression>
+	: <inclusive_or_expression>{printf("logical_and_expression\n");}
+	| <logical_and_expression> (AND_OP) <inclusive_or_expression>{printf("logical_and_expression\n");}
+	;
+
+<logical_or_expression>
+	: <logical_and_expression>{printf("logical_or_expression\n");}
+	| <logical_or_expression> (OR_OP) <logical_and_expression>{printf("logical_or_expression\n");}
+	;
+
+<conditional_expression>
+	: <logical_or_expression>{printf("conditional_expression\n");}
+	| <logical_or_expression> (QUESTION) <expression> (COLON) <conditional_expression>{printf("conditional_expression\n");}
+	;
+
+<assignment_expression>
+	: <conditional_expression>{printf("assignment_expression\n");}
+	| <unary_expression> <assignment_operator> <assignment_expression>{printf("assignment_expression\n");}
+	;
+
+<assignment_operator>
+	: (ASSIGN){printf("assignment_operator\n");}
+	| (MUL_ASSIGN){printf("assignment_operator\n");}
+	| (DIV_ASSIGN){printf("assignment_operator\n");}
+	| (MOD_ASSIGN){printf("assignment_operator\n");}
+	| (ADD_ASSIGN){printf("assignment_operator\n");}
+	| (SUB_ASSIGN){printf("assignment_operator\n");}
+	| (LEFT_ASSIGN){printf("assignment_operator\n");}
+	| (RIGHT_ASSIGN){printf("assignment_operator\n");}
+	| (AND_ASSIGN){printf("assignment_operator\n");}
+	| (XOR_ASSIGN){printf("assignment_operator\n");}
+	| (OR_ASSIGN){printf("assignment_operator\n");}
+	;
+
+<expression>
+	: <assignment_expression>{printf("expression\n");}
+	| <expression> (COMMA) <assignment_expression>{printf("expression\n");}
+	;
+
+<constant_expression>
+	: <conditional_expression>{printf("constant_expression\n");}
+	;
+
+<declaration>
+	: <declaration_specifiers> (SEMI_COLON){printf("declaration\n");}
+	| <declaration_specifiers> <init_declarator_list> (SEMI_COLON){printf("declaration\n");}
+	;
+
+<declaration_specifiers>
+	: <storage_class_specifier>{printf("declaration_specifiers\n");}
+	| <storage_class_specifier> <declaration_specifiers>{printf("declaration_specifiers\n");}
+	| <type_specifier>{printf("declaration_specifiers\n");}
+	| <type_specifier> <declaration_specifiers>{printf("declaration_specifiers\n");}
+	| <type_qualifier>{printf("declaration_specifiers\n");}
+	| <type_qualifier> <declaration_specifiers>{printf("declaration_specifiers\n");}
+	;
+
+<init_declarator_list>
+	: <init_declarator>{printf("init_declarator_list\n");}
+	| <init_declarator_list>(COMMA)<init_declarator>{printf("init_declarator_list\n");}
+	;
+
+<init_declarator>
+	: <declarator>{printf("init_declarator\n");}
+	| <declarator> (ASSIGN) <initializer>{printf("init_declarator\n");}
+	;
+
+<storage_class_specifier>
+	: (TYPEDEF){printf("storage_class_specifier\n");}
+	| (EXTERN){printf("storage_class_specifier\n");}
+	| (STATIC){printf("storage_class_specifier\n");}
+	| (AUTO){printf("storage_class_specifier\n");}
+	| (REGISTER){printf("storage_class_specifier\n");}
+	;
+
+<type_specifier>
+	: (VOID){printf("type_specifier\n");}
+	| (CHAR){printf("type_specifier\n");}
+	| (SHORT){printf("type_specifier\n");}
+	| (INT){printf("type_specifier\n");}
+	| (LONG){printf("type_specifier\n");}
+	| (FLOAT){printf("type_specifier\n");}
+	| (DOUBLE){printf("type_specifier\n");}
+	| (SIGNED){printf("type_specifier\n");}
+	| (UNSIGNED){printf("type_specifier\n");}
+	| <struct_or_union_specifier>{printf("type_specifier\n");}
+	| <enum_specifier>{printf("type_specifier\n");}
+	| (TYPE_NAME){printf("type_specifier\n");}
+	;
+
+<struct_or_union_specifier>
+	: <struct_or_union> (IDENTIFIER) (LBRACE) <struct_declaration_list> (RBRACE){printf("struct_or_union_specifier\n");}
+	| <struct_or_union> (LBRACE) <struct_declaration_list> (RBRACE){printf("struct_or_union_specifier\n");}
+	| <struct_or_union> (IDENTIFIER){printf("struct_or_union_specifier\n");hash_table_insert(symbol_table,$1->lex_val,$1->lex_val);}
+	;
+
+<struct_or_union>
+	: (STRUCT){printf("struct_or_union\n");}
+	| (UNION){printf("struct_or_union\n");}
+	;
+
+<struct_declaration_list>
+	: <struct_declaration>{printf("struct_declaration_list\n");}
+	| <struct_declaration_list> <struct_declaration>{printf("struct_declaration_list\n");}
+	;
+
+<struct_declaration>
+	: <specifier_qualifier_list> <struct_declarator_list> (SEMI_COLON){printf("struct_declaration\n");}
+	;
+
+<specifier_qualifier_list>
+	: <type_specifier> <specifier_qualifier_list>{printf("specifier_qualifier_list\n");}
+	| <type_specifier>{printf("specifier_qualifier_list\n");}
+	| <type_qualifier> <specifier_qualifier_list>{printf("specifier_qualifier_list\n");}
+	| <type_qualifier>{printf("specifier_qualifier_list\n");}
+	;
+
+<struct_declarator_list>
+	: <struct_declarator>{printf("struct_declarator_list\n");}
+	| <struct_declarator_list> (COMMA) <struct_declarator>{printf("struct_declarator_list\n");}
+	;
+
+<struct_declarator>
+	: <declarator>{printf("struct_declarator\n");}
+	| (COLON) <constant_expression>{printf("struct_declarator\n");}
+	| <declarator> (COLON) <constant_expression>{printf("struct_declarator\n");}
+	;
+
+<enum_specifier>
+	: (ENUM) (LBRACE) <enumerator_list> (RBRACE){printf("enum_specifier\n");}
+	| (ENUM) (IDENTIFIER) (LBRACE) <enumerator_list> (RBRACE){printf("enum_specifier\n");}
+	| (ENUM) (IDENTIFIER){printf("enum_specifier\n");}
+	;
+
+<enumerator_list>
+	: <enumerator>{printf("enumerator_list\n");}
+	| <enumerator_list> (COMMA) <enumerator>{printf("enumerator_list\n");}
+	;
+
+<enumerator>
+	: (IDENTIFIER){printf("enumerator\n");}
+	| (IDENTIFIER) (ASSIGN) <constant_expression>{printf("enumerator\n");}
+	;
+
+<type_qualifier>
+	: (CONST){printf("type_qualifier\n");}
+	| (VOLATILE){printf("type_qualifier\n");}
+	;
+
+<declarator>
+	: <pointer> <direct_declarator>{printf("declarator\n");}
+	| <direct_declarator>{printf("declarator\n");}
+	;
+
+<direct_declarator>
+	: (IDENTIFIER){printf("direct_declarator\n");}
+	| (LPAREN) <declarator> (RPAREN){printf("direct_declarator\n");}
+	| <direct_declarator> (LBRACKET) <constant_expression> (RBRACKET){printf("direct_declarator\n");}
+	| <direct_declarator> (LBRACKET) (RBRACKET){printf("direct_declarator\n");}
+	| <direct_declarator> (LPAREN) <parameter_type_list> (RPAREN){printf("direct_declarator\n");}
+	| <direct_declarator> (LPAREN) <identifier_list> (RPAREN){printf("direct_declarator\n");}
+	| <direct_declarator> (LPAREN) (RPAREN){printf("direct_declarator\n");}
+	;
+
+<pointer>
+	: (SPLAT){printf("pointer\n");}
+	| (SPLAT) <type_qualifier_list>{printf("pointer\n");}
+	| (SPLAT) <pointer>{printf("pointer\n");}
+	| (SPLAT) <type_qualifier_list> <pointer>{printf("pointer\n");}
+	;
+
+<type_qualifier_list>
+	: <type_qualifier>{printf("type_qualifier_list\n");}
+	| <type_qualifier_list> <type_qualifier>{printf("type_qualifier_list\n");}
+	;
+
+<parameter_type_list>
+	: <parameter_list>{printf("parameter_type_list\n");}
+	| <parameter_list> (COMMA) (ELLIPSIS){printf("parameter_type_list\n");}
+	;
+
+<parameter_list>
+	: <parameter_declaration>{printf("parameter_list\n");}
+	| <parameter_list> (COMMA) <parameter_declaration>{printf("parameter_list\n");}
+	;
+
+<parameter_declaration>
+	: <declaration_specifiers> <declarator>{printf("parameter_declaration\n");}
+	| <declaration_specifiers> <abstract_declarator>{printf("parameter_declaration\n");}
+	| <declaration_specifiers>{printf("parameter_declaration\n");}
+	;
+
+<identifier_list>
+	: (IDENTIFIER){printf("identifier_list\n");}
+	| <identifier_list> (COMMA) (IDENTIFIER){printf("identifier_list\n");}
+	;
+
+<type_name>
+	: <specifier_qualifier_list>{printf("type_name\n");}
+	| <specifier_qualifier_list> <abstract_declarator>{printf("type_name\n");}
+	;
+
+<abstract_declarator>
+	: <pointer>{printf("abstract_declaration\n");}
+	| <direct_abstract_declarator>{printf("abstract_declaration\n");}
+	| <pointer> <direct_abstract_declarator>{printf("abstract_declaration\n");}
+	;
+
+<direct_abstract_declarator>
+	: (LPAREN) <abstract_declarator> (RPAREN){printf("direct_abstract_declaration\n");}
+	| (LBRACKET) (RBRACKET){printf("direct_abstract_declaration\n");}
+	| (LBRACKET) <constant_expression> (RBRACKET){printf("direct_abstract_declaration\n");}
+	| <direct_abstract_declarator> (LBRACKET) (RBRACKET){printf("direct_abstract_declaration\n");}
+	| <direct_abstract_declarator> (LBRACKET) <constant_expression> (RBRACKET){printf("direct_abstract_declaration\n");}
+	| (LPAREN) (RPAREN){printf("direct_abstract_declaration\n");}
+	| (LPAREN) <parameter_type_list> (RPAREN){printf("direct_abstract_declaration\n");}
+	| <direct_abstract_declarator> (LPAREN) (RPAREN){printf("direct_abstract_declaration\n");}
+	| <direct_abstract_declarator> (LPAREN) <parameter_type_list> (RPAREN){printf("direct_abstract_declaration\n");}
+	;
+
+<initializer>
+	: <assignment_expression>{printf("initializer\n");}
+	| (LBRACE) <initializer_list> (RBRACE){printf("initializer\n");}
+	| (LBRACE) <initializer_list> (COMMA) (RBRACE){printf("initializer\n");}
+	;
+
+<initializer_list>
+	: <initializer>{printf("initializer_list\n");}
+	| <initializer_list> (COMMA) <initializer>{printf("initializer_list\n");}
+	;
+
+<statement>
+	: <labeled_statement>{printf("statement\n");}
+	| <compound_statement>{printf("statement\n");}
+	| <expression_statement>{printf("statement\n");}
+	| <selection_statement>{printf("statement\n");}
+	| <iteration_statement>{printf("statement\n");}
+	| <jump_statement>{printf("statement\n");}
+	;
+
+<labeled_statement>
+	: (IDENTIFIER) (COLON) <statement>{printf("labeled_statement\n");}
+	| (CASE) <constant_expression> (COLON) <statement>{printf("labeled_statement\n");}
+	| (DEFAULT) (COLON) <statement>{printf("labeled_statement\n");}
+	;
+
+<compound_statement>
+	: (LBRACE) (RBRACE){printf("compound_statement\n");}
+	| (LBRACE) <statement_list> (RBRACE){printf("compound_statement\n");}
+	| (LBRACE) <declaration_list> (RBRACE){printf("compound_statement\n");}
+	| (LBRACE) <declaration_list> <statement_list> (RBRACE){printf("compound_statement\n");}
+	;
+<declaration_list>
+	: <declaration>{printf("declaration_list\n");}
+	| <declaration_list> <declaration>{printf("declaration_list\n");}
+	;
+<statement_list>
+	: <statement>{printf("statement_list\n");}
+	| <statement_list> <statement>{printf("statement_list\n");}
+	;
+<expression_statement>
+	: (SEMI_COLON){printf("expression_statement\n");}
+	| <expression> (SEMI_COLON){printf("expression_statement\n");}
+	;
+<selection_statement>
+        : (IF) (LPAREN) <expression> (RPAREN) <statement>{printf("selection_statement\n");}
+	| (IF) (LPAREN) <expression> (RPAREN) <statement> (ELSE) <statement>{printf("selection_statement\n");}
+        | (SWITCH) (LPAREN) <expression> (RPAREN) <statement>{printf("selection_statement\n");}
+	;
+<iteration_statement>
+	: (WHILE) (LPAREN) <expression> (RPAREN) <statement>{printf("iteration_statement\n");}
+	| (DO) <statement> (WHILE) (LPAREN) <expression> (RPAREN) (SEMI_COLON){printf("iteration_statement\n");}
+	| (FOR) (LPAREN) <expression_statement> <expression_statement> (RPAREN) <statement>{printf("iteration_statement\n");}
+	| (FOR) (LPAREN) <expression_statement> <expression_statement> <expression> (RPAREN) <statement>{printf("iteration_statement\n");}
+	;
+<jump_statement>
+	: (GOTO) (IDENTIFIER) (SEMI_COLON){printf("jump_statement\n");}
+	| (CONTINUE) (SEMI_COLON){printf("jump_statement\n");}
+	| (BREAK) (SEMI_COLON){printf("jump_statement\n");}
+	| (RETURN) (SEMI_COLON){printf("jump_statement\n");}
+	| (RETURN) <expression> (SEMI_COLON){printf("jump_statement\n");}
+	;

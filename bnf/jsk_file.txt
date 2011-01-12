@@ -1,0 +1,16 @@
+{
+  "comment_fmt":       ["/*","*/"],
+  "stack_access_fmt":  ["__item_synth_val","PEEK_STACK(",")"],
+  "table_fmt":         ["{","{",",","},","}};"],
+  "action_fmt":        ["{","}"],
+  "skeleton_def":
+  {
+    "filename":"cskeleton.h",
+    "content":"int ptable=$PTABLE"
+  },
+  "skeleton_def":
+  {
+    "filename":"cskeleton.c",
+    "content":"int ptable=$PTABLE"
+  }
+}

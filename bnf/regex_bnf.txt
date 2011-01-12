@@ -1,0 +1,37 @@
+<expression_group>
+  :(LPAREN)<expression_list>(RPAREN){printf("<expression_group>\n");}
+  |(LPAREN)<expression_group>(RPAREN){printf("<expression_group>\n");}
+  |<expression_group><multip_specifier>{printf("<expression_group>\n");}
+  |<expression_group>(OR)<expression_group>{printf("<expression_group>\n");}
+  ;
+<expression_list>
+  :<expression>{printf("<expression_list>\n");}
+  |<expression_list><expression>{printf("<expression_list>\n");}
+  ;
+<expression>
+  :<character_class>{printf("<expression>\n");}
+  |<character_class>(OR){printf("<expression>\n");}
+  |<character_class><multip_specifier>{printf("<expression>\n");}
+  |<character_class><multip_specifier>(OR){printf("<expression>\n");}
+  ;
+<multip_specifier>
+  :(LBRACE)(NUMBER)(RBRACE){printf("<multip_specifier>\n");}
+  |(LBRACE)(NUMBER)(COMMA)(RBRACE){printf("<multip_specifier>\n");}
+  |(LBRACE)(COMMA)(NUMBER)(RBRACE){printf("<multip_specifier>\n");}
+  |(LBRACE)(NUMBER)(COMMA)(NUMBER)(RBRACE){printf("<multip_specifier>\n");}
+  |(ONE_OR_MORE){printf("<multip_specifier>\n");}
+  |(NONE_OR_MORE){printf("<multip_specifier>\n");}
+  |(OPTIONAL){printf("<multip_specifier>\n");}
+  ;
+<character_class>
+  :<characters>{printf("<character_class>\n");}
+  |(LBRACKET)<characters>(RBRACKET){printf("<character_class>\n");}
+  |(LBRACKET)(MATCH_END)<characters>(RBRACKET){printf("<character_class>\n");}
+  ;
+<characters>
+  :(CHARACTER){printf("<characters>\n");}
+  |(NUMBER){printf("<characters>\n");}
+  |(WILDCARD){printf("<characters>\n");}
+  |(POSIX_CLASS){printf("<characters>\n");}
+  |<characters>(CHARACTER){printf("<characters>\n");}
+  ;

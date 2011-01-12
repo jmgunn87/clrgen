@@ -1,0 +1,28 @@
+<object> 
+  :(LBRACE)(RBRACE){printf("<object>");}
+  |(LBRACE)<members>(RBRACE){printf("<object>");}
+  ;
+<members>
+  :<pair>{printf("<members>");}
+  |<pair>(COMMA)<members>{printf("<members>");}
+  ;
+<pair> 
+  :(STRING)(COLON)<value>{printf("<pair>");}
+  ;
+<array>
+  :(LBRACKET)(RBRACKET){printf("<array>");}
+  |(LBRACKET)<elements>(RBRACKET){printf("<array>");}
+  ;
+<elements>
+  :<value>{printf("<elements>");}
+  |<value>(COMMA)<elements>{printf("<elements>");}
+  ;
+<value>
+  :(STRING){printf("<value>");}
+  |(NUMBER){printf("<value>");}
+  |<object>{printf("<value>");}
+  |<array>{printf("<value>");}
+  |(TRUE){printf("<value>");}
+  |(FALSE){printf("<value>");}
+  |(NULL) {printf("<value>");}
+  ;

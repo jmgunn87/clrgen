@@ -1,0 +1,90 @@
+{
+  "grammar_name"        :"operators",
+  "author"              :"jmgunn87",
+  "table_compression"   :"1",
+  "skeleton_filepath"   :"jsk_file.txt",
+  "output_directory"    :"C",
+  "log_filename"        :"operators.log",
+  "log_outputs"         :["A"],
+  "action_options"      :["1"],
+  "default_sr_conflict" :"S",
+  "tokens":
+  {
+    "operatorA":["L"],
+    "operatorB":["R"],
+    "operatorC":["N"]
+  },
+
+  "start_symbol"        :"start",
+  "pre_includes":
+  "
+    #ifndef _PARSER_
+    #define _PARSER_
+    #include <stdio.h>
+  ",
+  "grammar_def":
+  "
+    <object> 
+      :(LBRACE)(RBRACE){printf(\"<object>\n\");}
+      |(LBRACE)<members>(RBRACE)
+      {
+        printf(\"<object>\");
+        $$=(void*)current_object;
+        current_object=new_slist();
+      }
+      ;
+    <members>
+      :<pair>
+      {
+        printf(\"<members>\n\");
+        slist_append(current_object,$1);
+      }
+      |<pair>(COMMA)<members>
+      {
+        printf(\"<members>\n\");
+        slist_append(current_object,$1);
+      }
+      ;
+    <pair> 
+      :(JS_STRING)(COLON)<value>
+      {
+        printf(\"<pair>\n\");
+        current_pair=new_json_pair((char*)$1,(json_value*)$3);
+        $$=(void*)current_pair;
+      }
+      ;
+    <array>
+      :(LBRACKET)(RBRACKET){printf(\"<array>\n\");}
+      |(LBRACKET)<elements>(RBRACKET)
+      {
+        printf(\"<array>\n\");
+        $$=(void*)current_array;
+        current_array=new_slist();
+      }
+      ;
+    <elements>
+      :<value>
+      {
+        printf(\"<elements>\n\");
+        slist_append(current_array,(void*)$1);
+        $$=$1;
+      }
+      |<value>(COMMA)<elements>
+      {
+        printf(\"<elements>\");
+        slist_append(current_array,(void*)$1);
+        $$=$1;
+      }
+      ;
+    <value>
+      :(JS_STRING){ printf(\"<value>\n\"); $$=(void*)new_json_value(JS_STRING,$1);}
+      |(JS_NUMBER){ printf(\"<value>\n\"); $$=(void*)new_json_value(JS_NUMBER,$1);}
+      |<object>   { printf(\"<value>\n\"); $$=(void*)new_json_value(JS_OBJECT,$1);}
+      |<array>    { printf(\"<value>\n\"); $$=(void*)new_json_value(JS_ARRAY,$1); }
+      |(JS_TRUE)  { printf(\"<value>\n\"); $$=(void*)new_json_value(JS_TRUE,$1);  }
+      |(JS_FALSE) { printf(\"<value>\n\"); $$=(void*)new_json_value(JS_FALSE,$1); }
+      |(JS_NULL)  { printf(\"<value>\n\"); $$=(void*)new_json_value(JS_NULL,$1);  }
+      ;
+  ",
+  "post_includes":"#endif"
+}

@@ -1,0 +1,39 @@
+<object_statement>
+  :<object_assert>{printf("<object_statement>\n");}
+  |<object_assign>{printf("<object_statement>\n");}
+  ;
+<object_assert>
+  :(IS)<object_member><object_member>{printf("<object_assert>\n");}
+  |(IS)(NOT)<object_member><object_member>{printf("<object_assert>\n");}
+  |<object_assert>(QUESTION){printf("<object_assert>\n");}
+  ;
+<object_assign>
+  :<object_member>(IS)<object_member>{printf("<object_assign>\n");}
+  |<object_member>(IS)(NOT)<object_member>{printf("<object_assign>\n");}
+  ;
+<object_member>
+  :<object>{printf("<object_member>\n");}
+  |<object_member>(APOS)(S)<object>{printf("<object_member>\n");}
+  |(REFERENCE_MEM)<object_member>{printf("<object_member>\n");}
+  ;  
+<object>
+  :<object_id>{printf("<object>\n");}
+  |(TYPE){printf("<object>\n");}
+  |<prefix>(TYPE){printf("<object>\n");}
+  |<object>(AND)<object_id>{printf("<object>\n");}
+  |<object>(OR)<object_id>{printf("<object>\n");}
+  ;
+<object_id>
+  :(INSTANCE){printf("<object_id>\n");}
+  |(REFERENCE){printf("<object_id>\n");}
+  ;
+<prefix>
+  :(TO){printf("<prefix>\n");}
+  |(FROM){printf("<prefix>\n");}
+  |(BEFORE){printf("<prefix>\n");}
+  |(AFTER){printf("<prefix>\n");}
+  |(AT){printf("<prefix>\n");}
+  |(A){printf("<prefix>\n");}
+  |(AN){printf("<prefix>\n");}
+  |(NUMBER){printf("<prefix>\n");}
+  ;

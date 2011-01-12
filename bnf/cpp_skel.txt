@@ -1,0 +1,77 @@
+template
+<
+  class stack_type,
+  class token_type
+>
+class $GRAMMAR_NAME_parser
+{
+  /***********************************
+   * protect all parser variables    *
+   * to allow derived classes access *
+   ***********************************/
+  protected:
+    static const int $GRAMMAR_NAME_accept_state=$ACCEPT_STATE;
+    stack_type parser_stack;
+    token_type item_synth_temp;
+
+  public:
+    /***********************************************
+     * The parser driver. virtualize this function *
+     * to allow possible changes a user might want *
+     * to make.                                    *
+     ***********************************************/
+    virtual int $GRAMMAR_NAME_parse_token(token_type token)
+    {
+      int top_state=0;
+      int pop_count=0;
+      int action=0;
+  
+      /*initialize the stack at state 0*/
+      if(stack_cursor==-1)
+          PUSH_STACK(0,0);
+  
+      while(1)
+      {
+        top_state=PEEK_STACK(0).lex_id;
+        if(!input)action=parse_table[top_state][18];
+        else if(input->lex_id>=18)return 0;
+        else action=parse_table[top_state][input->lex_id];
+    
+        if(action==ACCEPT)/*accept*/
+        {
+          action=--(PEEK_STACK(0).lex_id);
+          __prh(&action);
+          return ACCEPT;
+        }
+        if(action>0)/*shift*/
+        {
+          PUSH_STACK(action,input->lex_val);
+          return 1;
+        }
+        else if(action<0)/*reduce*/
+        {
+          pop_count=__prh(&action);
+          if(pop_count==-1)
+            return 0;/*catch errors here*/
+          POP_STACK(pop_count);/*pop the stack n times specified by __prh*/
+          PUSH_STACK(parse_table[PEEK_STACK(0).lex_id][action],__item_synth_val);/*push the reduction along with any synthesised values*/
+          __item_synth_val=0;
+          continue;
+        }
+        else/*error*/
+        {
+          return 0;
+        }
+      }
+    };
+
+  protected:
+    int $GRAMMAR_NAME_reduction_handler(int* ri)
+    {
+        switch(-*ri)
+        {
+$REDUCE_ACT
+        }
+    };
+    static const int parser_table[$PTBL_ROW_DIM][$PTBL_COL_DIM]=$PTABLE;
+};
