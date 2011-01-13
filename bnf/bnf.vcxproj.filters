@@ -36,9 +36,6 @@
     <ClInclude Include="set.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="parser_gen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -75,9 +72,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="set.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parser_gen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lexer.cpp">

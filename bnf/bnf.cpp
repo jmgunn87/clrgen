@@ -1,11 +1,6 @@
 // bnf.cpp : Defines the entry point for the console application.
 //
 #include "stdafx.h"
-#include "lexer.h"
-#include "set.h"
-#include "bnf_constructs.h"
-#include "parser_gen.h"
-#include "skeleton_gen.h"
 #include "jsk.h"
 #include "jy.h"
 

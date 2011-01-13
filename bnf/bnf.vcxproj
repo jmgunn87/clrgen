@@ -83,7 +83,6 @@
     <ClInclude Include="jy.h" />
     <ClInclude Include="lexer.h" />
     <ClInclude Include="parser.h" />
-    <ClInclude Include="parser_gen.h" />
     <ClInclude Include="set.h" />
     <ClInclude Include="skeleton_gen.h" />
     <ClInclude Include="slist.h" />
@@ -99,7 +98,6 @@
     <ClCompile Include="jy.cpp" />
     <ClCompile Include="lexer.cpp" />
     <ClCompile Include="parser.cpp" />
-    <ClCompile Include="parser_gen.cpp" />
     <ClCompile Include="set.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
     </ClCompile>

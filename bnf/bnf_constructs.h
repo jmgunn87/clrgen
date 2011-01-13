@@ -105,9 +105,6 @@ void bnf_closure(bnf_grammar* bnf,
 void bnf_merge_item_lookaheads(cset* merge,
                                cset* b);
 cset* bnf_get_item_kernels(cset* item);
-void bnf_kernel_items(bnf_grammar* bnf,
-                      bnf_index* i,
-                      cset* closure);
 void bnf_goto_closure(bnf_grammar* bnf,cset* item,cset* closure_out,int symbol);
 int bnf_goto(bnf_index* bi,
              cset* items);

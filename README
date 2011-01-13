@@ -1,0 +1,52 @@
+===================================================================
+
+                    ---=== clrgen ===---
+
+===================================================================
+  ANOTHER!!! LR(1) parser generator with flexible skeleton options.
+===================================================================
+
+AUTHOR : James Marshall-Gunn
+EMAIL  : jmgunn87@gmail.com
+
+***I promise to fill this out at a later date in more detail!***
+
+
+BUILD:
+
+This project was compiled on x64 windows vista using VC++2010.
+It has not been tested on any other system with any other compiler
+but that will change.
+
+
+OVERVIEW:
+
+Lots of work is needed in terms of configuration, formatting and
+portability. The set and list data structures need reformatting and
+refining and lexing and parsing internally could also be sorted out
+but thier upgrading is certainly in the pipeline.
+
+Asides from aformentioned issues, the LR(1) items and parse table
+construction algorithms are pretty solid. I have successfully
+generated parsers using these algorithms for languages such as
+ANSI C, PHP, Lisp(but that's too easy!), SQL-98 and also for bnf 
+which the generator itself is currently using(ironic really).
+
+My main motivation for this project is to facilitate generating
+parsers in any language. I realise that bison has this capability
+but i found that its template/skeleton format was rather confusing,
+underdocumented and not very inspiring. 
+Again lots of work is needed on the skeleton end but currently it
+recognises formatting for the parse table, comments and actions
+which can be used for generation.
+
+
+CONTRIBUTIONS:
+
+If you're interested in making contributions, by all means got for
+it. Please make sure as usual you keep your code commented as clearly
+and concisely as possible as i want anyone to be able to understand
+this system quickly. The naming convention is nothing incredible,
+lower case names, words seperated by underscores.
+Asides from that I'm interested in any form of feedback, contribution
+or advice.
