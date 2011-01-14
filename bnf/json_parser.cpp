@@ -270,12 +270,25 @@ int __json_parse_token(lp_token* input)
   }
 }
 
+/********************************************
+ * Lex a .jy file completely. this is an    *
+ * all-in-one lexer, and makes exception    *
+ * for <jsk$ & <jy$ tags which help protect *
+ * quote issues when strings encoded in the *
+ * user sections contain quotes.            *
+ ********************************************/
 slist* __json_lex(char* str)
 {
   int i=0;
   int sublen=0;
+  int lookahead=0;
   char* substr=0;
-  slist* lexed_inputs=new_slist();
+  slist* lexed_inputs=0;
+    
+  if(!str)
+    return 0;
+
+  lexed_inputs=new_slist();
   for(;i<strlen(str);++i)
     switch(str[i])
     {
@@ -301,13 +314,20 @@ slist* __json_lex(char* str)
         break;      
       case '\"':
         for(sublen=0;i<strlen(str)&&str[++i]!='\"';++sublen)
-          if(str[i]=='\\'&&str[i+1]=='\"')
-          {
-            str[i]=' ';
-            ++i;
-            ++sublen;
-          }
-
+          if(str[i]=='\\')
+            if(str[i+1]=='\"')
+            {
+              str[i]=' '; 
+              ++i;
+              ++sublen;
+            }
+            else if(str[i+1]=='n')
+            {
+              str[i]=' ';
+              str[i+1]='\n';
+              ++i;
+              ++sublen;
+            }
         substr=(char*)malloc(sublen+1);
         substr[sublen]='\0';
         strncpy(substr,&str[i-sublen],sublen);

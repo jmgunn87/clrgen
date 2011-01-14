@@ -5,6 +5,20 @@
 #include "bnf_constructs.h"
 #include "utility.h"
 
+/************************************
+ * enumerator of system recognized  *
+ * skeleton variables.              *
+ ************************************/
+typedef enum _SKELETON_VAR
+{
+  SKV_PTABLE_ROW_DIM=1,
+  SKV_PTABLE_COL_DIM=2,
+  SKV_PTABLE=3,
+  SKV_ACCEPT_STATE=4,
+  SKV_GRAMMAR_NAME=5
+
+} SKELETON_VAR;
+
 typedef struct _skeleton_template
 {
   char* filename;

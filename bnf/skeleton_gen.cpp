@@ -4,8 +4,9 @@
 
 const char* gnu_public_license=
 "\
-/**************************************************************************\n\
- *  NanoLR(1) Parser Generator                                            *\n\
+*************************************************************************\n\
+ *  clrgen Parser Generator                                               *\n\
+ *  http://www.jmgcode.co.uk                                              *\
  *  Copyright (C) 2011  James Marshall-Gunn                               *\n\
  *------------------------------------------------------------------------*\n\
  *  This program is free software: you can redistribute it and/or modify  *\n\
@@ -20,9 +21,74 @@ const char* gnu_public_license=
  *                                                                        *\n\
  *  You should have received a copy of the GNU General Public License     *\n\
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>  *\n\
- **************************************************************************/\n\
-\n\
+ *************************************************************************\
 ";
+
+/**************************************
+ * determine which skeleton variable  *
+ * a string is. If it doesn't match   *
+ * any registered variables return -1.*
+ * for help, this function takes an   *
+ * iterator as a second argument to   *
+ * let the caller know the string     *
+ * length of the matched variable     *
+ **************************************/
+int lex_skeleton_var(char* var,
+                     int* i)
+{
+  int match=0;
+  int len=0;
+
+  if(!var)
+    return -1;
+
+  if(*var=='P')
+    if(strncmp(var,"PTABLE_ROW_DIM",14)==0)
+    {
+      match=SKV_PTABLE_ROW_DIM;
+      len=14;
+    }
+    else if(strncmp(var,"PTABLE_COL_DIM",14)==0)
+    {
+      match=SKV_PTABLE_COL_DIM;
+      len=14;
+    }
+    else if(strncmp(var,"PTABLE",6)==0)
+    {
+      match=SKV_PTABLE;
+      len=6;
+    }
+    else//unknown var
+      match=-1;
+  else if(strncmp(var,"REDUCE_ACT",10)==0)
+  {
+    match=-1;
+    len=10;
+  }
+  else if(strncmp(var,"ACCEPT_STATE",12)==0)
+  {
+    match=SKV_ACCEPT_STATE;
+    len=12;
+  }
+  else if(strncmp(var,"GRAMMAR_NAME",12)==0)
+  {
+    match=SKV_GRAMMAR_NAME;
+    len=12;
+  }
+  else//unknown var
+    return match=-1;
+
+  /* now return any match and append the varname length
+     to the iterator if it exists*/
+  if(match!=-1)
+  {
+    if(i)
+      *i+=len;
+    return match;
+  }
+  return -1;
+}
+
 int skeleton_generate(bnf_grammar* bnf,
                       skeleton_format* skfmt,
                       char* filename,
@@ -71,56 +137,35 @@ int skeleton_generate(bnf_grammar* bnf,
 
       /* make sure this ain't the last symbol*/
       if(i+1==strlen(sk_buff)-1)
-      {
-        err=-1;
-        break;
-      }
+        {err=-1; break;}
 
       /* now determine the var name and generate its data*/
       ++i;
-      if(sk_buff[i]=='P')
-        if(strncmp(&sk_buff[i],"PTABLE_ROW_DIM",14)==0)
-        {
-          i+=14;
+      switch(lex_skeleton_var(&sk_buff[i],&i))
+      {
+        case SKV_PTABLE_ROW_DIM:
           fprintf(out_file,"%d",ptbl_row_dim);
-        }
-        else if(strncmp(&sk_buff[i],"PTABLE_COL_DIM",14)==0)
-        {
-          i+=14;
-          fprintf(out_file,"%d",ptbl_col_dim);
-        }
-        else if(strncmp(&sk_buff[i],"PTABLE",6)==0)
-        {
-          i+=6;
-          if(!write_parse_table(out_file,ptbl,ptbl_row_dim,ptbl_col_dim,skfmt))
-          {
-            err=-1;
-            break;
-          }
-        }
-        else
-        {//unknown var
-          err=-1;
           break;
-        }
-      else if(strncmp(&sk_buff[i],"REDUCE_ACT",10)==0)
-      {
-        i+=10;
-        if(!write_reduction_handler(out_file,bnf,skfmt))            
-        {
-          err=-1;
-          break;  
-        }
-      }
-      else if(strncmp(&sk_buff[i],"ACCEPT_STATE",12)==0)
-      {
-        i+=12;
-        fprintf(out_file,"%d",accept_state);
-      }
-      else
-      {//unknown var
-        err=-1;
-        break;
+        case SKV_PTABLE_COL_DIM:
+          fprintf(out_file,"%d",ptbl_col_dim);
+          break;
+        case SKV_PTABLE:
+          if(!write_parse_table(out_file,ptbl,ptbl_row_dim,ptbl_col_dim,skfmt))
+            {err=-1;break;}
+          break;
+          /*Reduce actions
+            if(!write_reduction_handler(out_file,bnf,skfmt))            
+            {err=-1;break;}*/
+        case SKV_ACCEPT_STATE:
+          fprintf(out_file,"%d",accept_state);
+          break;
+        case SKV_GRAMMAR_NAME:
+          fprintf(out_file,"%s",bnf->grammar_name);
+          break;
+        case -1:
+        default:
+          err=-1;//error
+          break;
       }
       last_pt=i;
     }

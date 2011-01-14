@@ -1,7 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "jsk.h"
+ 
 
+/*******************************************
+ * primitive jsk key lexer. inside selecta *
+ *******************************************/
 SKFMT_TYPE get_format_key_type(char* key)
 {
   if(!key)
@@ -19,6 +23,10 @@ SKFMT_TYPE get_format_key_type(char* key)
     return SKFMT_UNKNOWN;
 }
 
+/****************************************
+ * convert a parsed json object into    *
+ * its skeleton template representation *
+ ****************************************/
 int json_to_sk_template(slist* root,
                         skeleton_template* sktmp)
 {
@@ -49,6 +57,7 @@ int json_to_sk_template(slist* root,
   }
   return 1;
 }
+
 int json_to_skeleton(slist* root,
                      skeleton_format* skfmt)
 {

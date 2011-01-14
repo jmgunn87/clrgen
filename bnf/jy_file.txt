@@ -1,10 +1,10 @@
 {
-  "grammar_name"        :"operators",
+  "grammar_name"        :"json",
   "author"              :"jmgunn87",
   "table_compression"   :"1",
-  "skeleton_filepath"   :"jsk_file.txt",
+  "skeleton_filepath"   :"jscript_jsk.txt",
   "output_directory"    :"C",
-  "log_filename"        :"operators.log",
+  "log_filename"        :"json.log",
   "log_outputs"         :["A"],
   "action_options"      :["1"],
   "default_sr_conflict" :"S",
@@ -16,12 +16,7 @@
   },
 
   "start_symbol"        :"start",
-  "pre_includes":
-  "
-    #ifndef _PARSER_
-    #define _PARSER_
-    #include <stdio.h>
-  ",
+  "pre_includes":"#ifndef _PARSER_",
   "grammar_def":
   "
     <object> 
