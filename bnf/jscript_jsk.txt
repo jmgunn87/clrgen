@@ -1,0 +1,25 @@
+{
+  "comment_fmt":       ["/*","*/\n"],
+  "stack_access_fmt":  ["item_synth_val","parse_stack.peek(",")"],
+  "table_fmt":         ["[", "[", ",", "],\n" ,"]];\n"],
+  "action_fmt":        ["",""],
+
+  "skeleton_def":
+  {
+    "filename":"jskeleton.js",
+    "content":
+"
+var parse_table=\n$PTABLE
+var parse_stack=new Array(10);
+var $GRAMMAR_NAME_accept_state=$ACCEPT_STATE;
+function new_token(id,val){return {lex_id:id,lex_val:val};}
+function $GRAMMAR_NAME_parse(token)
+{
+  if(!token)
+    return 0; 
+
+  alert(parse_table[0][0]);
+}
+"
+  }
+}
